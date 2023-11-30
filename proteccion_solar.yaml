@@ -45,7 +45,7 @@ blueprint:
           step: 1.0
     temperature_sensor:
       name: Sensor Temperatura
-      description: El sensor utilizado para leer la temperatura.
+      description: El sensor utilizado para leer la temperatura exterior.
       selector:
         entity:
           domain:
@@ -132,8 +132,6 @@ condition:
     conditions:
     - condition: template
       value_template: '{{ curtain_current_position > curtain_target_position }}'
-    - condition: template
-      value_template: '{{ states(weather_entity_id) in weather_close }}'
     - condition: template
       value_template: '{{ state_attr(''sun.sun'', ''elevation'') >= sun_elevation_close
         }}'
