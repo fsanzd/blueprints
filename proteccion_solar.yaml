@@ -116,12 +116,12 @@ trigger:
   above: !input sun_position_end
   id: t_sun_azimuth_end_above
 - platform: numeric_state
-  entity_id: !input weather
+  entity_id: !input temperature_sensor
   attribute: temperature
   above: !input outdoor_temp
   id: t_temp_above
 - platform: numeric_state
-  entity_id: !input weather
+  entity_id: !input temperature_sensor
   attribute: temperature
   below: !input outdoor_temp
   id: t_temp_below
@@ -141,7 +141,7 @@ condition:
         > sun_azimuth_open and (state_attr(''sun.sun'', ''azimuth'') >= sun_azimuth_close
         or state_attr(''sun.sun'', ''azimuth'') <= sun_azimuth_open)) }}'
     - condition: template
-      value_template: '{{ state_attr(weather_entity_id, ''temperature'') >= temp_close
+      value_template: '{{ state_attr(temp_sensor, ''temperature'') >= temp_close
         }}'
   - condition: and
     conditions:
@@ -153,8 +153,6 @@ condition:
       conditions:
       - condition: and
         conditions:
-        - condition: trigger
-          id: t_weather_not_sunny
         - condition: template
           value_template: '{{ state_attr(''sun.sun'', ''elevation'') >= sun_elevation_close
             }}'
@@ -164,12 +162,10 @@ condition:
             > sun_azimuth_open and (state_attr(''sun.sun'', ''azimuth'') >= sun_azimuth_close
             or state_attr(''sun.sun'', ''azimuth'') <= sun_azimuth_open)) }}'
         - condition: template
-          value_template: '{{ state_attr(weather_entity_id, ''temperature'') >= temp_close
+          value_template: '{{ state_attr(temp_sensor, ''temperature'') >= temp_close
             }}'
       - condition: and
         conditions:
-        - condition: template
-          value_template: '{{ states(weather_entity_id) in weather_close }}'
         - condition: trigger
           id: t_sun_elevation_below
         - condition: template
@@ -178,24 +174,20 @@ condition:
             > sun_azimuth_open and (state_attr(''sun.sun'', ''azimuth'') >= sun_azimuth_close
             or state_attr(''sun.sun'', ''azimuth'') <= sun_azimuth_open)) }}'
         - condition: template
-          value_template: '{{ state_attr(weather_entity_id, ''temperature'') >= temp_close
+          value_template: '{{ state_attr(temp_sensor, ''temperature'') >= temp_close
             }}'
       - condition: and
         conditions:
-        - condition: template
-          value_template: '{{ states(weather_entity_id) in weather_close }}'
         - condition: template
           value_template: '{{ state_attr(''sun.sun'', ''elevation'') >= sun_elevation_close
             }}'
         - condition: trigger
           id: t_sun_azimuth_end_above
         - condition: template
-          value_template: '{{ state_attr(weather_entity_id, ''temperature'') >= temp_close
+          value_template: '{{ state_attr(temp_sensor, ''temperature'') >= temp_close
             }}'
       - condition: and
         conditions:
-        - condition: template
-          value_template: '{{ states(weather_entity_id) in weather_close }}'
         - condition: template
           value_template: '{{ state_attr(''sun.sun'', ''elevation'') >= sun_elevation_close
             }}'
@@ -212,8 +204,6 @@ action:
     - condition: template
       value_template: '{{ curtain_current_position > curtain_target_position }}'
     - condition: template
-      value_template: '{{ states(weather_entity_id) in weather_close }}'
-    - condition: template
       value_template: '{{ state_attr(''sun.sun'', ''elevation'') >= sun_elevation_close
         }}'
     - condition: template
@@ -222,7 +212,7 @@ action:
         > sun_azimuth_open and (state_attr(''sun.sun'', ''azimuth'') >= sun_azimuth_close
         or state_attr(''sun.sun'', ''azimuth'') <= sun_azimuth_open)) }}'
     - condition: template
-      value_template: '{{ state_attr(weather_entity_id, ''temperature'') >= temp_close
+      value_template: '{{ state_attr(temp_sensor, ''temperature'') >= temp_close
         }}'
     sequence:
     - service: cover.set_cover_position
@@ -236,8 +226,6 @@ action:
     - condition: or
       conditions:
       - condition: template
-        value_template: '{{ states(weather_entity_id) not in weather_close }}'
-      - condition: template
         value_template: '{{ state_attr(''sun.sun'', ''elevation'') < sun_elevation_close
           }}'
       - condition: template
@@ -247,7 +235,7 @@ action:
           ''azimuth'') < sun_azimuth_close and state_attr(''sun.sun'', ''azimuth'')
           > sun_azimuth_open)) }}'
       - condition: template
-        value_template: '{{ state_attr(weather_entity_id, ''temperature'') < temp_close
+        value_template: '{{ state_attr(temp_sensor, ''temperature'') < temp_close
           }}'
     sequence:
     - service: cover.set_cover_position
