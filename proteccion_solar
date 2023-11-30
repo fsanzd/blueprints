@@ -70,7 +70,7 @@ blueprint:
       default: '22:00:00'
       selector:
         time: {}
-  source_url: https://gist.github.com/daniel-sc/074465be04dd9a793cba5b841ab63f83
+  source_url: https://github.com/fsanzd/blueprints/blob/main/proteccion_solar.yaml
 variables:
   sun_elevation_close: !input sun_elevation_start
   sun_azimuth_close: !input sun_position_start
