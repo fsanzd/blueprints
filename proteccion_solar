@@ -1,6 +1,6 @@
 blueprint:
-  name: Cubrir el sol
-  description: Cierre la persiana cuando brille el sol y ábrala cuando pare. Esto considera el clima (soleado, parcialmente nublado), la posición del sol (elevación, azimut) y la temperatura.
+  name: Protección solar
+  description: Cierre la persiana cuando brille el sol y ábrala cuando pare. Esto considera la posición del sol (elevación, azimut) y la temperatura de un sensor externo.
   domain: automation
   input:
     cover_entity:
@@ -70,40 +70,6 @@ blueprint:
       default: '22:00:00'
       selector:
         time: {}
-    weather:
-      name: Servicio meteorológico
-      default: weather.home
-      selector:
-        entity:
-          domain:
-          - weather
-          multiple: false
-    close_weather_conditions:
-      name: Condiciones climáticas
-      description: Cierre la persiana en todas las condiciones climáticas seleccionadas (si se cumplen todas las demás condiciones)
-      default:
-      - sunny
-      - partlycloudy
-      selector:
-        select:
-          multiple: true
-          options:
-          - clear-night
-          - cloudy
-          - fog
-          - hail
-          - lightning
-          - lightning-rainy
-          - partlycloudy
-          - pouring
-          - rainy
-          - snowy
-          - snowy-rainy
-          - sunny
-          - windy
-          - windy-variant
-          - exceptional
-          custom_value: false
   source_url: https://gist.github.com/daniel-sc/074465be04dd9a793cba5b841ab63f83
 variables:
   sun_elevation_close: !input sun_elevation_start
@@ -140,16 +106,6 @@ trigger:
   attribute: azimuth
   above: !input sun_position_end
   id: t_sun_azimuth_end_above
-- platform: state
-  entity_id: !input weather
-  to: !input close_weather_conditions
-  not_from: !input close_weather_conditions
-  id: t_weather_sunny
-- platform: state
-  entity_id: !input weather
-  not_to: !input close_weather_conditions
-  from: !input close_weather_conditions
-  id: t_weather_not_sunny
 - platform: numeric_state
   entity_id: !input weather
   attribute: temperature
