@@ -43,6 +43,16 @@ blueprint:
           unit_of_measurement: °
           mode: slider
           step: 1.0
+    temperature_sensor:
+      name: Sensor Temperatura
+      description: El sensor utilizado para leer la temperatura.
+      selector:
+        entity:
+          domain:
+            - sensor
+          device_class:
+            - temperature
+          multiple: false
     outdoor_temp:
       name: Temperatura exterior
       description: Temperatura por encima de la cual se cerrarán las contraventanas.
@@ -75,12 +85,11 @@ variables:
   sun_elevation_close: !input sun_elevation_start
   sun_azimuth_close: !input sun_position_start
   sun_azimuth_open: !input sun_position_end
+  temp_sensor: !input temperature_sensor
   temp_close: !input outdoor_temp
   curtain_entity_id: !input cover_entity
   curtain_target_position: !input close_position
   no_open_after_time: !input no_open_after
-  weather_entity_id: !input weather
-  weather_close: !input close_weather_conditions
   curtain_current_position: '{{ state_attr(curtain_entity_id, ''current_position'')
     if state_attr(curtain_entity_id, ''current_position'') is not none else state_attr(curtain_entity_id,
     ''position'') }}'
