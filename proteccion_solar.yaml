@@ -4,7 +4,7 @@ blueprint:
   domain: automation
   input:
     cover_entity:
-      name: cover
+      name: Persiana / Toldo
       selector:
         entity:
           domain:
